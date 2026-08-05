@@ -1,0 +1,31 @@
+node_modules
+
+# Output
+.output
+.vercel
+.netlify
+.wrangler
+/.svelte-kit
+/build
+
+# OS
+.DS_Store
+Thumbs.db
+# Finder/iCloud sync duplicates ("markdown 2.svelte", "cron 2.yml", …)
+* [0-9].*
+
+# Env
+.env
+.env.*
+!.env.example
+
+# Vite
+vite.config.js.timestamp-*
+vite.config.ts.timestamp-*
+
+# Editor
+.vscode
+
+# Agent worktrees + machine-local agent settings (settings.json IS committed)
+.claude/worktrees/
+.claude/settings.local.json

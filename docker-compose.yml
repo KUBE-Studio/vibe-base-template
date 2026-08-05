@@ -1,0 +1,53 @@
+# Deployed to the server by .github/workflows/deploy.yml together with a
+# generated .env (see that workflow for the full list of variables).
+services:
+    app:
+        image: ${APP_IMAGE}
+        container_name: ${APP_SLUG}-app
+        restart: unless-stopped
+        ports:
+            - '3000:3000'
+        environment:
+            # Built by the deploy workflow with a URL-encoded password so special
+            # characters in POSTGRES_PASSWORD don't corrupt the connection string.
+            DATABASE_URL: ${DATABASE_URL}
+            ORIGIN: https://${DOMAIN}
+            AUTH_SECRET: ${AUTH_SECRET}
+            BREVO_API_KEY: ${BREVO_API_KEY}
+            BREVO_SENDER_EMAIL: ${BREVO_SENDER_EMAIL}
+            GOOGLE_CLIENT_ID: ${GOOGLE_CLIENT_ID}
+            GOOGLE_CLIENT_SECRET: ${GOOGLE_CLIENT_SECRET}
+        depends_on:
+            postgres:
+                condition: service_healthy
+        networks:
+            - appnet
+
+    postgres:
+        image: postgres:17-alpine
+        container_name: ${APP_SLUG}-db
+        restart: unless-stopped
+        environment:
+            POSTGRES_USER: app
+            POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+            POSTGRES_DB: app
+        volumes:
+            - pgdata:/var/lib/postgresql/data
+        healthcheck:
+            test: ['CMD-SHELL', 'pg_isready -U app']
+            interval: 5s
+            timeout: 5s
+            retries: 5
+        networks:
+            appnet:
+                ipv4_address: 10.5.0.2
+
+networks:
+    appnet:
+        driver: bridge
+        ipam:
+            config:
+                - subnet: 10.5.0.0/24
+
+volumes:
+    pgdata:

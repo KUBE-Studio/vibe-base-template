@@ -1,0 +1,42 @@
+name: CI
+
+on:
+    push:
+        branches: [main, dev]
+    pull_request:
+    workflow_dispatch:
+
+# The guardrail. Every check here also runs locally via `bun run verify` —
+# if CI fails, the same command reproduces it on the developer's machine.
+jobs:
+    verify:
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@v6
+
+            - uses: oven-sh/setup-bun@v2
+              with:
+                  bun-version: latest
+
+            - name: Install dependencies
+              run: bun install --frozen-lockfile
+
+            - name: Lint (prettier + eslint)
+              run: bun run lint
+
+            - name: Typecheck (svelte-check)
+              run: bun run check
+
+            - name: Tests
+              run: bun run test
+
+            - name: Dead code & unused dependencies (knip)
+              run: bun run knip
+
+            - name: Build
+              # Placeholders only: better-auth is constructed at module load, the
+              # real values come from the environment at runtime.
+              env:
+                  ORIGIN: http://localhost
+                  AUTH_SECRET: build-time-placeholder
+              run: bun run build

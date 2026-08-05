@@ -1,0 +1,9 @@
+{
+	"$schema": "https://unpkg.com/knip@6/schema.json",
+	"entry": ["server.ts"],
+	"project": ["src/**/*.{ts,svelte}"],
+	"drizzle": false,
+	"ignoreDependencies": ["tailwindcss", "@tailwindcss/forms", "@tailwindcss/typography"],
+	"exclude": ["enumMembers"],
+	"tags": ["-public"]
+}
