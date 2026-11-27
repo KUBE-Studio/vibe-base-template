@@ -36,7 +36,7 @@ import {
 	Users,
 	UserRoundMinus,
 	UserRoundCheck,
-	type IconProps as LucideIconProps,
+	type LucideProps,
 	Search,
 	Tag,
 	Trash2,
@@ -64,7 +64,7 @@ import {
 import Google from './google.svelte';
 import CircleDashedSharp from './circle-dashed-sharp.svelte';
 
-export type IconProps = LucideIconProps;
+export type IconProps = LucideProps;
 
 export type RegisteredIconNames =
 	| 'arrow-left'

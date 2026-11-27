@@ -8,8 +8,15 @@
 	import { resolve } from '$app/paths';
 	import Button from '$lib/components/base/button.svelte';
 
+	interface Props {
+		/** Whether Google login is configured on the server. */
+		googleLogin: boolean;
+	}
+
+	let { googleLogin }: Props = $props();
+
 	const schema = z.object({
-		email: z.email('Bitte eine gültige Email eingeben'),
+		email: z.email('Bitte eine gültige E-Mail-Adresse eingeben'),
 		password: z.string().min(1, 'Bitte Passwort eingeben')
 	});
 
@@ -67,20 +74,22 @@
 </script>
 
 <form use:enhance class="mx-auto mt-2xl flex w-450 max-w-full flex-col gap-sm">
-	<Button element="button" onclick={googleSignIn} leftIcon="google" color="outline" title="Mit Google anmelden" />
+	{#if googleLogin}
+		<Button element="button" onclick={googleSignIn} leftIcon="google" color="outline" title="Mit Google anmelden" />
 
-	<div class="text-label flex items-center gap-md py-xs text-text-soft" aria-label="Alternative Login-Trennung">
-		<div aria-hidden="true" class="my-lg w-full border-t border-neutral-200"></div>
-		<span class="typography-2xs">oder</span>
-		<div aria-hidden="true" class="my-lg w-full border-t border-neutral-200"></div>
-	</div>
+		<div class="text-label flex items-center gap-md py-xs text-text-soft" aria-label="Alternative Login-Trennung">
+			<div aria-hidden="true" class="my-lg w-full border-t border-neutral-200"></div>
+			<span class="typography-2xs">oder</span>
+			<div aria-hidden="true" class="my-lg w-full border-t border-neutral-200"></div>
+		</div>
+	{/if}
 
 	<div class="flex flex-col gap-lg">
-		<TextInput type="email" id="email" label="Email" placeholder="E-Mail" bind:value={$form.email} errors={$errors.email} />
+		<TextInput type="email" id="email" label="E-Mail" placeholder="E-Mail" bind:value={$form.email} errors={$errors.email} />
 		<TextInput
 			type="password"
 			id="password"
-			label="Password"
+			label="Passwort"
 			placeholder="Passwort"
 			bind:value={$form.password}
 			errors={$errors.password} />
@@ -95,7 +104,7 @@
 	{/if}
 
 	{#if emailVerificationRequired}
-		<p class="text-center text-sm text-shadow-primary-600">
+		<p class="text-center text-sm text-primary-600">
 			Bitte bestätige deine E-Mail-Adresse. Wir haben dir erneut eine Bestätigungs-E-Mail gesendet.
 		</p>
 	{/if}

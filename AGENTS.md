@@ -17,6 +17,11 @@ SvelteKit 2 + Svelte 5 (Runes-Modus erzwungen) · Bun · Vite · Tailwind CSS v4
 tRPC 11 (HTTP + WebSocket) · Drizzle ORM + Postgres · better-auth · Zod ·
 `@sveltejs/adapter-node` · TypeScript strict.
 
+**SvelteKit bleibt auf 2.x** (npm-Tag `version-2`, bekommt weiter Sicherheitsupdates):
+KI-Assistenten schreiben noch SvelteKit-2-Code (`$lib`, `svelte.config.js`,
+`$app/stores`), der unter 3 bricht. TypeScript bleibt auf 6, weil `svelte-check` 7 noch
+nicht unterstützt.
+
 ## Architektur (Mentales Modell)
 
 ```
@@ -84,6 +89,7 @@ SvelteKit load() ──createCaller()──► derselbe Router (kein HTTP-Roundt
 
 ```bash
 bun install
+bun run db:up            # lokales Postgres in Docker (docker-compose.dev.yml)
 bun run dev              # Dev-Server (migriert die DB beim Start automatisch)
 bun run verify           # lint + check + test + knip — vor jedem Commit
 bun run db:generate <name>   # Migration aus Schema-Änderungen erzeugen
@@ -98,6 +104,11 @@ bun run db:generate <name>   # Migration aus Schema-Änderungen erzeugen
 - Ohne `BREVO_API_KEY` schreibt der E-Mail-Service im Dev-Modus in die Konsole
   statt zu versenden (`services/email.ts`) — Bestätigungs- und Reset-Links stehen
   damit im Server-Log. In Produktion ist ein fehlender Key ein Konfigurationsfehler.
+- Google-Login ist optional: ohne `GOOGLE_CLIENT_ID`/`GOOGLE_CLIENT_SECRET` wird der
+  Provider nicht registriert und die Auth-Seiten blenden den Button aus
+  (`googleLoginEnabled`, `routes/auth/+layout.server.ts`).
+- Den ersten Admin macht `bun run make-admin <E-Mail>` — ohne Admin kann niemand eine
+  Registrierung freigeben.
 
 ## Was Agenten hier nicht tun
 
@@ -114,7 +125,9 @@ bun run db:generate <name>   # Migration aus Schema-Änderungen erzeugen
 ## Deployment
 
 GitHub Actions → GHCR → SSH auf den Zielserver (`.github/workflows/deploy.yml`),
-davor einmalig `setup.yml` (Docker, nginx, certbot). nginx-Vorlage:
+davor einmalig `setup.yml` (Docker, nginx, certbot). Deploy und Zertifikatserneuerung
+laufen nur, wenn die Repository-Variable `DEPLOY_ENABLED` auf `true` steht — eine
+frische Kopie hat keinen Server. nginx-Vorlage:
 `nginx/app.conf` (`__DOMAIN__` wird beim Deploy ersetzt). Benötigte Secrets stehen
 oben in `deploy.yml`.
 

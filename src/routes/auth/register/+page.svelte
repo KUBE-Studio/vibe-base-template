@@ -1,6 +1,9 @@
 <script lang="ts">
 	import { RegisterForm } from '$lib/components/forms';
 	import { APP_NAME } from '$lib/config';
+	import type { PageProps } from './$types';
+
+	let { data }: PageProps = $props();
 </script>
 
 <svelte:head>
@@ -13,6 +16,6 @@
 			<h1 class="mb-sm typography-h4 font-semibold">Erstelle einen Account</h1>
 			<p class="typography-md text-text-sub">Registriere dich, um Zugang zu beantragen.</p>
 		</div>
-		<RegisterForm />
+		<RegisterForm googleLogin={data.googleLogin} />
 	</div>
 </div>

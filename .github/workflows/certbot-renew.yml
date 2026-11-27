@@ -7,6 +7,8 @@ on:
 
 jobs:
     renew:
+        # Same switch as deploy.yml: without a server there is no certificate to renew.
+        if: vars.DEPLOY_ENABLED == 'true'
         runs-on: ubuntu-latest
         steps:
             - name: Set up SSH

@@ -1,6 +1,6 @@
 {
 	"$schema": "https://unpkg.com/knip@6/schema.json",
-	"entry": ["server.ts"],
+	"entry": ["server.ts", "scripts/*.ts"],
 	"project": ["src/**/*.{ts,svelte}"],
 	"drizzle": false,
 	"ignoreDependencies": ["tailwindcss", "@tailwindcss/forms", "@tailwindcss/typography"],
