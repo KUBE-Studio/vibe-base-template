@@ -59,7 +59,7 @@
 		{/if}
 
 		<div class="flex flex-col gap-sm">
-			<TextInput id="forgot-password-email" type="email" label="Email" placeholder="E-Mail" bind:value={email} />
+			<TextInput id="forgot-password-email" type="email" label="E-Mail" placeholder="E-Mail" bind:value={email} />
 			<Button element="button" title={loading ? 'Senden...' : 'Reset-Link senden'} onclick={onSubmit} disabled={loading} />
 		</div>
 

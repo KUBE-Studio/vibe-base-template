@@ -1,6 +1,9 @@
 <script lang="ts">
 	import { LoginForm } from '$lib/components/forms';
 	import { APP_NAME } from '$lib/config';
+	import type { PageProps } from './$types';
+
+	let { data }: PageProps = $props();
 </script>
 
 <svelte:head>
@@ -14,6 +17,6 @@
 			<p class="typography-md text-text-sub">Melde dich an, um fortzufahren.</p>
 		</div>
 
-		<LoginForm />
+		<LoginForm googleLogin={data.googleLogin} />
 	</div>
 </div>

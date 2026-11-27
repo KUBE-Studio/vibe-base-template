@@ -7,7 +7,7 @@
 	import { resolve } from '$app/paths';
 	import type { PageData } from './$types';
 
-	const { data } = $props<{ data: PageData }>();
+	const { data }: { data: PageData } = $props();
 
 	let newPassword = $state('');
 	let confirmPassword = $state('');
@@ -23,7 +23,7 @@
 		const token = data.token;
 
 		if (!token) {
-			errorMessage = 'Reset-Token fehlt oder ist ungultig.';
+			errorMessage = 'Reset-Token fehlt oder ist ungültig.';
 			return;
 		}
 
@@ -33,7 +33,7 @@
 		}
 
 		if (newPassword !== confirmPassword) {
-			errorMessage = 'Passworter stimmen nicht uberein.';
+			errorMessage = 'Passwörter stimmen nicht überein.';
 			return;
 		}
 

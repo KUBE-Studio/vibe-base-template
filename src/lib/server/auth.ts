@@ -7,6 +7,13 @@ import { db } from '$lib/server/db';
 import { RegistrationStatus, Role } from '$lib/types';
 import { buildResetPasswordEmail, buildVerificationEmail, emailService } from '$lib/server/services';
 
+/**
+ * Google login is optional: without a client id and secret the provider is not
+ * registered and the auth screens hide the button (`routes/auth/+layout.server.ts`),
+ * so a fresh copy has no button that can only fail.
+ */
+export const googleLoginEnabled = Boolean(env.GOOGLE_CLIENT_ID && env.GOOGLE_CLIENT_SECRET);
+
 const getProfileNames = (profile: { given_name?: string; family_name?: string; name?: string; email?: string }) => {
 	const fullNameParts = profile.name?.trim().split(/\s+/) ?? [];
 	const firstName = profile.given_name?.trim() || fullNameParts[0] || profile.email?.split('@')[0] || '';
@@ -94,13 +101,15 @@ export const auth = betterAuth({
 			});
 		}
 	},
-	socialProviders: {
-		google: {
-			clientId: env.GOOGLE_CLIENT_ID!,
-			clientSecret: env.GOOGLE_CLIENT_SECRET!,
-			mapProfileToUser: (profile) => getProfileNames(profile)
-		}
-	},
+	socialProviders: googleLoginEnabled
+		? {
+				google: {
+					clientId: env.GOOGLE_CLIENT_ID!,
+					clientSecret: env.GOOGLE_CLIENT_SECRET!,
+					mapProfileToUser: (profile) => getProfileNames(profile)
+				}
+			}
+		: {},
 	advanced: {
 		database: {
 			generateId: 'uuid'

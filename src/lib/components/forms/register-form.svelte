@@ -7,10 +7,17 @@
 	import { navigate } from '$lib/utils';
 	import Button from '$lib/components/base/button.svelte';
 
+	interface Props {
+		/** Whether Google login is configured on the server. */
+		googleLogin: boolean;
+	}
+
+	let { googleLogin }: Props = $props();
+
 	const schema = z.object({
 		firstName: z.string().min(1, 'Bitte Vornamen eingeben'),
 		lastName: z.string().min(1, 'Bitte Nachnamen eingeben'),
-		email: z.email('Bitte eine gültige Email eingeben'),
+		email: z.email('Bitte eine gültige E-Mail-Adresse eingeben'),
 		password: z.string().min(8, 'Passwort muss mindestens 8 Zeichen lang sein')
 	});
 
@@ -119,13 +126,15 @@
 </script>
 
 <form use:enhance class="mx-auto mt-2xl flex w-450 max-w-full flex-col gap-sm">
-	<Button element="button" onclick={googleSignIn} leftIcon="google" color="outline" title="Mit Google anmelden" />
+	{#if googleLogin}
+		<Button element="button" onclick={googleSignIn} leftIcon="google" color="outline" title="Mit Google registrieren" />
 
-	<div class="text-label flex items-center gap-md py-xs text-text-soft" aria-label="Alternative Login-Trennung">
-		<div aria-hidden="true" class="my-lg w-full border-t border-neutral-200"></div>
-		<span class="typography-2xs">oder</span>
-		<div aria-hidden="true" class="my-lg w-full border-t border-neutral-200"></div>
-	</div>
+		<div class="text-label flex items-center gap-md py-xs text-text-soft" aria-label="Alternative Login-Trennung">
+			<div aria-hidden="true" class="my-lg w-full border-t border-neutral-200"></div>
+			<span class="typography-2xs">oder</span>
+			<div aria-hidden="true" class="my-lg w-full border-t border-neutral-200"></div>
+		</div>
+	{/if}
 	<div class="flex flex-col gap-lg">
 		<div class="grid grid-cols-1 gap-lg sm:grid-cols-2">
 			<TextInput
@@ -144,11 +153,11 @@
 				errors={$errors.lastName} />
 		</div>
 
-		<TextInput type="email" id="email" label="Email" placeholder="E-Mail" bind:value={$form.email} errors={$errors.email} />
+		<TextInput type="email" id="email" label="E-Mail" placeholder="E-Mail" bind:value={$form.email} errors={$errors.email} />
 		<TextInput
 			type="password"
 			id="password"
-			label="Password"
+			label="Passwort"
 			placeholder="Passwort"
 			bind:value={$form.password}
 			errors={$errors.password} />

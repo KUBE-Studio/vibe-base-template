@@ -1,10 +1,11 @@
 <script lang="ts">
 	import type { IconProps } from '.';
 
-	let { size }: IconProps = $props();
+	// `strokeWidth` is for line icons; these are filled, so it is dropped rather than spread onto the <svg>.
+	let { size, strokeWidth: _strokeWidth, ...rest }: IconProps = $props();
 </script>
 
-<svg xmlns="http://www.w3.org/2000/svg" width={size} height={size} viewBox="0 0 20 20" fill="none">
+<svg {...rest} xmlns="http://www.w3.org/2000/svg" width={size} height={size} viewBox="0 0 20 20" fill="none">
 	<path
 		d="M18.7511 10.1941C18.7511 9.47471 18.6915 8.94971 18.5626 8.40527H10.1797V11.6525H15.1003C15.0011 12.4594 14.4654 13.6747 13.2749 14.4913L13.2582 14.6L15.9087 16.6123L16.0924 16.6303C17.7788 15.1039 18.7511 12.858 18.7511 10.1941Z"
 		fill="#4285F4" />

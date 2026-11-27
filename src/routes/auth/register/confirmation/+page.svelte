@@ -56,8 +56,9 @@
 			</div>
 			<h1 class="mb-lg typography-h4 font-semibold">E-Mail prüfen</h1>
 			<p class="typography-md text-text-sub">
-				Falls für diese E-Mail-Adresse eine Registrierung möglich oder bereits vorhanden ist, haben wir eine Bestätigungsmail an <strong
-					>{data.email}</strong> versendet.
+				Falls für diese E-Mail-Adresse eine Registrierung möglich oder bereits vorhanden ist, haben wir eine Bestätigungsmail an <strong>
+					{data.email}
+				</strong> versendet.
 			</p>
 		</div>
 

@@ -64,8 +64,9 @@
 				{:else if selected.length > 0}
 					{selected[0].label}
 				{:else}
-					<span class="font-normal text-text-soft group-disabled/trigger:text-slate-800 group-data-[error=true]:text-error"
-						>{placeholder || ''}</span>
+					<span class="font-normal text-text-soft group-disabled/trigger:text-slate-800 group-data-[error=true]:text-error">
+						{placeholder || ''}
+					</span>
 				{/if}
 			</p>
 

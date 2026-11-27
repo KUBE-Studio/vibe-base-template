@@ -1,0 +1,23 @@
+# Local Postgres for `bun run dev` — matches DATABASE_URL in .env.example.
+# Start: `bun run db:up` · stop: `bun run db:down` (data stays in the volume).
+# Production uses docker-compose.yml, deployed by .github/workflows/deploy.yml.
+services:
+    db:
+        image: postgres:17-alpine
+        environment:
+            POSTGRES_USER: app
+            POSTGRES_PASSWORD: app
+            POSTGRES_DB: app
+        ports:
+            # Port taken by another Postgres? Set DB_PORT in .env and change DATABASE_URL to match.
+            - '127.0.0.1:${DB_PORT:-5432}:5432'
+        volumes:
+            - pgdata-dev:/var/lib/postgresql/data
+        healthcheck:
+            test: ['CMD-SHELL', 'pg_isready -U app']
+            interval: 2s
+            timeout: 5s
+            retries: 15
+
+volumes:
+    pgdata-dev:

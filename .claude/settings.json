@@ -11,6 +11,8 @@
 			"Bash(bun run knip)",
 			"Bash(bun run verify)",
 			"Bash(bun run db:generate:*)",
+			"Bash(bun run db:up)",
+			"Bash(bun run db:down)",
 			"Bash(bun --version)",
 			"Bash(git status)",
 			"Bash(git diff:*)",
